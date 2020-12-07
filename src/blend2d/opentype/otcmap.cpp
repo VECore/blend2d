@@ -710,6 +710,7 @@ BLResult init(BLOTFaceImpl* faceI, const BLFontData* fontData) noexcept {
   }
   else {
     // No cmap support, diagnostics was already set.
+    faceI->faceInfo.diagFlags |= BL_FONT_FACE_DIAG_WRONG_CMAP_DATA;
     faceI->funcs.mapTextToGlyphs = mapTextToGlyphsNone;
     return BL_SUCCESS;
   }
