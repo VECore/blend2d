@@ -348,10 +348,12 @@ endif()
 # Do not make this more complicated than it is. We assume that compiler can
 # handle either all (SSE2, SSE3, ... AVX) or nothing. We require C++11 so
 # this should exclude all old compilers where this assumption would not hold.
+if (NOT EMSCRIPTEN)
 if (BLEND2D_CFLAGS_AVX2)
   list(APPEND BLEND2D_PRIVATE_CFLAGS "-DBL_BUILD_OPT_AVX2")
 elseif (BLEND2D_CFLAGS_AVX)
   list(APPEND BLEND2D_PRIVATE_CFLAGS "-DBL_BUILD_OPT_AVX")
+endif()
 endif()
 
 # =============================================================================
