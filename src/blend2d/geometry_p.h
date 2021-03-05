@@ -618,14 +618,8 @@ static BL_INLINE void blApproximateCubicWithTwoQuads(const BLPoint p[4], BLPoint
   if (c1 == p[0])
     c1 = blGetLineVectorIntersection(p[0], blGetCubicStartTangent(p), pm, blGetCubicDerivativeAt(p, 0.5));
 
-    if (std::isnan(c1.x) || std::isnan(c1.y))
-        c1 = blLerp(p[0], p[1], 0.75);
-
   if (c2 == p[3])
     c2 = blGetLineVectorIntersection(p[3], blGetCubicEndTangent(p), pm, blGetCubicDerivativeAt(p, 0.5));
-
-    if (std::isnan(c2.x) || std::isnan(c2.y))
-        c2 = blLerp(p[3], p[2], 0.75);
 
   quads[0] = p[0];
   quads[1] = c1;
@@ -650,7 +644,10 @@ static BL_INLINE BLResult blApproximateCubicWithQuads(const BLPoint p[4], double
 
   for (;;) {
     BLPoint quads[5];
-    t = blMin(t, 1.0);
+    t = blMin(1.0, t);
+
+    if (t >= 0.999)
+      t = 1.0;
 
     // Split the cubic:
     //   - cubic[0:3] contains the part before `t`.
