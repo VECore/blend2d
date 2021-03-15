@@ -341,8 +341,10 @@ else()
 endif()
 
 # Use SSE2 by default on X86/X64 as this is our baseline.
-if (BLEND2D_CFLAGS_SSE2)
-  list(APPEND BLEND2D_PRIVATE_CFLAGS ${BLEND2D_CFLAGS_SSE2})
+if (NOT EMSCRIPTEN)
+  if (BLEND2D_CFLAGS_SSE2)
+    list(APPEND BLEND2D_PRIVATE_CFLAGS ${BLEND2D_CFLAGS_SSE2})
+  endif()
 endif()
 
 # Do not make this more complicated than it is. We assume that compiler can
@@ -681,6 +683,12 @@ foreach(src_file ${BLEND2D_SRC_LIST})
 endforeach()
 
 source_group(TREE "${BLEND2D_DIR}" FILES ${BLEND2D_SRC})
+
+if (EMSCRIPTEN)
+  message(STATUS "Add wasm compile flags")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1 -s WASM=1")
+  set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -s USE_PTHREADS=1 -s WASM=1")
+endif()
 
 # =============================================================================
 # [Blend2D - Summary]
